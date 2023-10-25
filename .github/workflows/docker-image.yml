@@ -26,4 +26,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ secrets.DOCKER_HUB_REPOSITORY }}:${{ github.sha }}
+        tags: ${{ secrets.DOCKER_HUB_REPOSITORY }}:M${{ github.sha }}

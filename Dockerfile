@@ -27,6 +27,7 @@ RUN apt-get -qq update \
     && unzip -qq opencv.zip -d /opt \
     && rm -rf opencv.zip \
     && cmake \
+        -D BUILD_LIST=core,imgcodecs,imgproc,videoio,features2d,photo \
         -D BUILD_TIFF=ON \
         -D BUILD_opencv_java=OFF \
         -D WITH_CUDA=OFF \
