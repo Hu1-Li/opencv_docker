@@ -24,7 +24,7 @@ RUN apt-get -qq update \
         libpq-dev \
         cron \
         gifsicle \
-    && pip install numpy == 1.24.4 \
+    && pip install numpy==1.24.4 \
     && wget -q https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip -O opencv.zip \
     && unzip -qq opencv.zip -d /opt \
     && rm -rf opencv.zip \
