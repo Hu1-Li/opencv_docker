@@ -1,7 +1,6 @@
 FROM python:3.8
 
 WORKDIR /opt/build
-
 ENV OPENCV_VERSION="4.8.1"
 
 RUN apt-get -qq update \
@@ -22,7 +21,7 @@ RUN apt-get -qq update \
         libopenjp2-7-dev \
         libavformat-dev \
         libpq-dev \
-    && pip install numpy \
+    && pip install numpy==1.24.4 \
     && wget -q https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip -O opencv.zip \
     && unzip -qq opencv.zip -d /opt \
     && rm -rf opencv.zip \
@@ -31,7 +30,7 @@ RUN apt-get -qq update \
         -D BUILD_TIFF=ON \
         -D BUILD_opencv_java=OFF \
         -D WITH_CUDA=OFF \
-        -D WITH_OPENGL=ON \
+        -D WITH_OPENGL=OFF \
         -D WITH_OPENCL=ON \
         -D WITH_IPP=ON \
         -D WITH_TBB=ON \
@@ -52,3 +51,5 @@ RUN apt-get -qq update \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get -qq autoremove \
     && apt-get -qq clean
+
+RUN pip install Pillow==10.1.0 black==23.9.1 torch==2.0.1 torchvision==0.15.2 python-dotenv==1.0.0 PyYAML==6.0.1 pyftpdlib==1.5.8 imageio==2.31.5 orjson==3.9.9 pydantic==2.4.2 confluent_kafka==2.2.0 requests==2.31.0 minio==7.1.17 pre-commit ruff
