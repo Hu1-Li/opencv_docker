@@ -50,8 +50,6 @@ RUN set -eux; \
 		tk-dev \
 		uuid-dev \
 		wget \
-                cron \
-		procps \
 		xz-utils \
 		zlib1g-dev \
 	; \
@@ -122,6 +120,7 @@ RUN set -eux; \
 		| xargs -r apt-mark manual \
 	; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+	apt-get update && apt-get install -y --no-install-recommends cron && rm -rf /var/lib/apt/lists/* && apt-get -qq autoremove && apt-get -qq clean; \
 	rm -rf /var/lib/apt/lists/*; \
 	\
 	python3 --version
