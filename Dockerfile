@@ -50,6 +50,8 @@ RUN set -eux; \
 		tk-dev \
 		uuid-dev \
 		wget \
+                cron \
+		procps \
 		xz-utils \
 		zlib1g-dev \
 	; \
