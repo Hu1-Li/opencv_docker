@@ -11,6 +11,4 @@ RUN unzip -o -qq libtorch.zip
 ENV LIBTORCH /code/libtorch
 ENV LD_LIBRARY_PATH /code/libtorch/lib:$LD_LIBRARY_PATH
 
-RUN cargo build --release
-COPY /code/target/release/test_tch .
-RUN rm -rf /code/target
+RUN cargo build --release && cp /code/target/release/test_tch . && rm -rf /code/target
