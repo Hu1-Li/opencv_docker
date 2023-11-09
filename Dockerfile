@@ -1,5 +1,5 @@
 # Build Stage
-FROM ekidd/rust-musl-builder:stable AS builder
+FROM deltat/tch:latest AS builder
 RUN curl -s https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.0.0%2Bcpu.zip -o libtorch.zip
 RUN unzip -o -qq libtorch.zip
 ENV LIBTORCH /root/rust/src/libtorch
