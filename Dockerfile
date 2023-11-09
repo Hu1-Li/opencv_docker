@@ -1,11 +1,12 @@
 # Build Stage
 FROM deltat/tch:latest AS builder
+USER root
 RUN curl -s https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.0.0%2Bcpu.zip -o libtorch.zip
 RUN unzip -o -qq libtorch.zip
 ENV LIBTORCH /root/rust/src/libtorch
+ENV LIBTORCH_INCLUDE /root/rust/src/libtorch/include
 ENV LD_LIBRARY_PATH /root/rust/src/libtorch/lib:$LD_LIBRARY_PATH
-ADD --chown=rust:rust . ./
-RUN chown -R rust:rust /root/rust/src/
+COPY . .
 RUN cargo build --release --target x86_64-unknown-linux-musl
 
 # Bundle Stage
