@@ -5,6 +5,7 @@ RUN unzip -o -qq libtorch.zip
 ENV LIBTORCH /root/rust/src/libtorch
 ENV LD_LIBRARY_PATH /root/rust/src/libtorch/lib:$LD_LIBRARY_PATH
 ADD --chown=rust:rust . ./
+RUN chown -R rust:rust /root/rust/src/
 RUN cargo build --release --target x86_64-unknown-linux-musl
 
 # Bundle Stage
