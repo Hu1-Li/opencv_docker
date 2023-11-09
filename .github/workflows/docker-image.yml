@@ -26,5 +26,5 @@ jobs:
       with:
         context: .
         push: true
-        tags: deltat/tch:latest
+        tags: deltat/tch:rust
         
