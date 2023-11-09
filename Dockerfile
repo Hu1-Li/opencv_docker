@@ -14,8 +14,8 @@ FROM ubuntu
 WORKDIR /code
 COPY --from=builder /root/rust/src/target/release/test_tch .
 COPY --from=builder /root/rust/src/libtorch .
-ENV LIBTORCH /code/libtorch
-ENV LIBTORCH_INCLUDE /code/libtorch
-ENV LD_LIBRARY_PATH /code/libtorch/lib:$LD_LIBRARY_PATH
+ENV LIBTORCH /code/
+ENV LD_LIBRARY_PATH /code/lib:$LD_LIBRARY_PATH
+RUN apt-get update && apt-get install -y libgomp1 && rm -rf /var/lib/apt/lists/*
 CMD ["./test_tch"]
 
