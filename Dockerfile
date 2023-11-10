@@ -1,8 +1,16 @@
 # Build Stage
-FROM rust AS builder
+FROM ubuntu:22.04 AS builder
+
+RUN set -xeu && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y curl clang libclang-dev libopencv-dev
+
+RUN set -xeu && \
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile=minimal
+
+ENV PATH="${PATH}:/root/.cargo/bin"
+
 WORKDIR /root/rust/src/
 COPY . .
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y libopencv-dev clang libclang-dev
 RUN cargo build --release
 
 
