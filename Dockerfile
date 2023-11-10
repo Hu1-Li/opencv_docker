@@ -1,6 +1,6 @@
 # Build Stage
 FROM ubuntu:22.04 AS builder
-RUN set -xeu && apt-get update && apt-get install -y curl unzip && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile=minimal
+RUN set -xeu && apt-get update && apt-get install -y curl unzip clang libclang-dev && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile=minimal
 ENV PATH="${PATH}:/root/.cargo/bin"
 WORKDIR /code/
 COPY . .
