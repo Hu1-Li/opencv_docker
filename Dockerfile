@@ -8,12 +8,10 @@ WORKDIR /code
 COPY . .
 
 # Install OpenCV dependencies
-RUN apt-get update && \
-    apt-get install -y libopencv-dev
+RUN apt-get update && apt-get install -y libopencv-dev clang libclang-dev
 
 # Build the Rust application
 RUN cargo build --release
 
 # Run the application
 CMD ["cargo", "run"]
-
