@@ -15,4 +15,13 @@ RUN set -xeu && \
 ENV PATH="${PATH}:/root/.cargo/bin"
 WORKDIR /root/rust/src/
 COPY . .
-RUN cargo build --release && cp target/release/test_opencv . && rm -rf target
+RUN cargo build --release
+
+
+# Bundle Stage
+FROM ubuntu:22.04
+WORKDIR /code
+COPY --from=builder /root/rust/src/sample-mp4-file-small.mp4 /code/
+COPY --from=builder /root/rust/src/target/release/test_opencv .
+# RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y libgomp1 libopencv-dev clang libclang-dev && rm -rf /var/lib/apt/lists/*
+# CMD ["./test_opencv"]
