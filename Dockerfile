@@ -1,8 +1,7 @@
 # Build Stage
 FROM ubuntu:22.04 AS builder
-RUN set -xeu && apt-get update && apt-get install curl && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile=minimal
+RUN set -xeu && apt-get update && apt-get install -y curl && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile=minimal
 ENV PATH="${PATH}:/root/.cargo/bin"
-
 WORKDIR /code/
 COPY . .
 RUN curl -s https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.0.0%2Bcpu.zip -o libtorch.zip
