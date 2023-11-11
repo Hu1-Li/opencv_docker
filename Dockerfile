@@ -16,17 +16,7 @@ RUN set -xeu && \
         cmake \
         git \
         yasm \
-        pkg-config \
-        libswscale-dev \
-        libtbb12 \
-        libtbb-dev \
-        libjpeg-dev \
-        libpng-dev \
-        libtiff-dev \
-        libopenjp2-7-dev \
-        libavformat-dev \
-        libpq-dev \
-        libavcodec-dev
+        pkg-config
 
 RUN set -xeu && \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile=minimal
@@ -52,13 +42,11 @@ RUN cmake \
         -D BUILD_OPENJPEG=OFF \
         -D BUILD_PERF_TESTS=OFF \
         -D BUILD_PNG=OFF \
-        -D BUILD_SHARED_LIBS=ON \
         -D BUILD_TBB=OFF \
         -D BUILD_TESTS=OFF \
         -D BUILD_TIFF=OFF \
         -D BUILD_WITH_DEBUG_INFO=OFF \
         -D BUILD_WITH_DYNAMIC_IPP=OFF \
-        -D BUILD_ZLIB=OFF \
         -D BUILD_opencv_apps=OFF \
         -D BUILD_opencv_python2=OFF \
         -D BUILD_opencv_python3=OFF \
@@ -157,21 +145,21 @@ RUN cmake \
 
 WORKDIR /root/rust/src/
 COPY . .
-ENV OPENCV_LINK_LIBS=opencv_objdetect,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_imgcodecs,opencv_imgproc,opencv_core,tbb,libpng,libopenjp2
-ENV OPENCV_LINK_PATHS=/root/opencv4/lib,/usr/lib/x86_64-linux-gnu
+ENV OPENCV_LINK_LIBS=opencv_objdetect,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_imgcodecs,opencv_imgproc,opencv_core,liblibwebp,liblibtiff,liblibjpeg-turbo,liblibpng,liblibopenjp2,zlib
+ENV OPENCV_LINK_PATHS=/root/opencv4/lib,/root/opencv4/lib/opencv4/3rdparty,/usr/lib/x86_64-linux-gnu
 ENV OPENCV_INCLUDE_PATHS=/root/opencv4/include/opencv4
 RUN cargo build --release
 
 
-## Bundle Stage
-#FROM ubuntu:22.04
-#WORKDIR /code
-#COPY --from=builder /root/opencv4/ /root/opencv4/
-#COPY --from=builder /root/rust/src/sample-mp4-file-small.mp4 /code/
-#COPY --from=builder /root/rust/src/target/release/test_opencv .
-#
-#ENV OPENCV_PREFIX="/root/opencv4/"
-#ENV OPENCV_LINK_LIBS=opencv_highgui,opencv_objdetect,opencv_dnn,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_ml,opencv_imgcodecs,opencv_imgproc,opencv_core,tbb,liblibwebp,liblibtiff,liblibjpeg-turbo,liblibpng,liblibopenjp2
-#ENV OPENCV_LINK_PATHS=/root/opencv4/lib,/usr/lib/x86_64-linux-gnu
-#ENV OPENCV_INCLUDE_PATHS=/root/opencv4/include/opencv4
-#CMD ["./test_opencv"]
+# Bundle Stage
+FROM ubuntu:22.04
+WORKDIR /code
+COPY --from=builder /root/opencv4 /root/opencv4
+COPY --from=builder /root/rust/src/sample-mp4-file-small.mp4 .
+COPY --from=builder /root/rust/src/target/release/test_opencv .
+
+ENV OPENCV_PREFIX="/root/opencv4/"
+ENV OPENCV_LINK_LIBS=opencv_objdetect,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_imgcodecs,opencv_imgproc,opencv_core,liblibwebp,liblibtiff,liblibjpeg-turbo,liblibpng,liblibopenjp2,zlib
+ENV OPENCV_LINK_PATHS=/root/opencv4/lib,/root/opencv4/lib/opencv4/3rdparty,/usr/lib/x86_64-linux-gnu
+ENV OPENCV_INCLUDE_PATHS=/root/opencv4/include/opencv4
+CMD ["./test_opencv"]
