@@ -188,3 +188,4 @@ ENV OPENCV_INCLUDE_PATHS=/root/opencv4/include/opencv4
 
 WORKDIR /app
 COPY --from=builder /code/target/release/test_tch_opencv .
+COPY --from=builder /code/sample-mp4-file-small.mp4 .
