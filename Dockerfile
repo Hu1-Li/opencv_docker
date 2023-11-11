@@ -7,7 +7,25 @@ RUN set -xeu && \
     apt-get -y autoclean
 
 RUN set -xeu && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y curl clang libclang-dev wget unzip build-essential cmake
+    DEBIAN_FRONTEND=noninteractive apt-get install -y curl \
+        clang \
+        libclang-dev \
+        wget \
+        unzip \
+        build-essential \
+        cmake \
+        git \
+        yasm \
+        pkg-config \
+        libswscale-dev \
+        libtbb12 \
+        libtbb-dev \
+        libjpeg-dev \
+        libpng-dev \
+        libtiff-dev \
+        libopenjp2-7-dev \
+        libavformat-dev \
+        libpq-dev
 
 RUN set -xeu && \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile=minimal
@@ -16,12 +34,13 @@ ENV PATH="${PATH}:/root/.cargo/bin"
 
 ENV OPENCV_VERSION="4.8.1"
 ENV OPENCV_PREFIX="/root/opencv4/"
-RUN wget -q https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip -O opencv.zip && unzip -qq opencv.zip -d /opt/ && cmake \
+RUN wget -q https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip -O opencv.zip && unzip -qq opencv.zip -d /opt/
+
+RUN cmake \
         -D BUILD_CUDA_STUBS=OFF \
         -D BUILD_DOCS=OFF \
         -D BUILD_EXAMPLES=OFF \
-        -D BUILD_IPP_IW=ON \
-        -D BUILD_ITT=ON \
+        -D BUILD_IPP_IW=OFF \
         -D BUILD_JASPER=OFF \
         -D BUILD_JAVA=OFF \
         -D BUILD_JPEG=OFF \
@@ -29,7 +48,6 @@ RUN wget -q https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip -O op
         -D BUILD_OPENJPEG=OFF \
         -D BUILD_PERF_TESTS=OFF \
         -D BUILD_PNG=OFF \
-        -D BUILD_PROTOBUF=ON \
         -D BUILD_SHARED_LIBS=ON \
         -D BUILD_TBB=OFF \
         -D BUILD_TESTS=OFF \
@@ -59,7 +77,7 @@ RUN wget -q https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip -O op
         -D OPENCV_FORCE_3RDPARTY_BUILD=OFF \
         -D OPENCV_GENERATE_PKGCONFIG=OFF \
         -D PROTOBUF_UPDATE_FILES=OFF \
-        -D WITH_1394=ON \
+        -D WITH_1394=OFF \
         -D WITH_ADE=ON \
         -D WITH_ARAVIS=OFF \
         -D WITH_CLP=OFF \
@@ -67,7 +85,7 @@ RUN wget -q https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip -O op
         -D WITH_CUDA=OFF \
         -D WITH_CUFFT=OFF \
         -D WITH_EIGEN=ON \
-        -D WITH_FFMPEG=ON \
+        -D WITH_FFMPEG=OFF \
         -D WITH_GDAL=ON \
         -D WITH_GDCM=OFF \
         -D WITH_GIGEAPI=OFF \
@@ -86,7 +104,6 @@ RUN wget -q https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip -O op
         -D WITH_JASPER=OFF \
         -D WITH_JPEG=ON \
         -D WITH_LAPACK=ON \
-        -D WITH_LIBV4L=OFF \
         -D WITH_MATLAB=OFF \
         -D WITH_MFX=OFF \
         -D WITH_OPENCL=OFF \
@@ -94,42 +111,40 @@ RUN wget -q https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip -O op
         -D WITH_OPENCLAMDFFT=OFF \
         -D WITH_OPENCL_SVM=OFF \
         -D WITH_OPENEXR=OFF \
-        -D WITH_OPENGL=ON \
-        -D WITH_OPENMP=OFF \
+        -D WITH_OPENMP=ON \
         -D WITH_OPENNI2=OFF \
         -D WITH_OPENNI=OFF \
         -D WITH_OPENVX=OFF \
         -D WITH_PNG=ON \
-        -D WITH_PROTOBUF=ON \
+        -D WITH_PROTOBUF=OFF \
         -D WITH_PTHREADS_PF=ON \
         -D WITH_PVAPI=OFF \
-        -D WITH_QT=ON \
-        -D WITH_QUIRC=ON \
+        -D WITH_QT=OFF \
+        -D WITH_QUIRC=OFF \
         -D WITH_TBB=ON \
         -D WITH_TIFF=ON \
         -D WITH_UNICAP=OFF \
-        -D WITH_V4L=ON \
         -D WITH_VA=ON \
         -D WITH_VA_INTEL=ON \
         -D WITH_VTK=ON \
         -D WITH_WEBP=ON \
         -D WITH_XIMEA=OFF \
         -D WITH_XINE=OFF \
+
         -D BUILD_JPEG=ON \
         -D BUILD_OPENJPEG=ON \
         -D BUILD_PNG=ON \
         -D BUILD_SHARED_LIBS=OFF \
-        -D WITH_IPP=ON \
         -D WITH_TBB=ON \
         -D BUILD_TIFF=ON \
         -D BUILD_WEBP=ON \
         -D BUILD_ZLIB=ON \
         -D WITH_EIGEN=ON \
-        -D WITH_V4L=ON \
+        -D WITH_V4L=OFF \
         -D BUILD_TIFF=ON \
         -D BUILD_opencv_java=OFF \
         -D WITH_CUDA=OFF \
-        -D WITH_OPENGL=ON \
+        -D WITH_OPENGL=OFF \
         -D WITH_OPENCL=ON \
         -D BUILD_TESTS=OFF \
         -D BUILD_PERF_TESTS=OFF \
@@ -138,22 +153,27 @@ RUN wget -q https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip -O op
         -D BUILD_opencv_python2=OFF \
         -D BUILD_opencv_python3=OFF \
         -D CMAKE_INSTALL_PREFIX=${OPENCV_PREFIX} \
-        /opt/opencv-${OPENCV_VERSION} && make -j$(nproc) && make install
+        /opt/opencv-${OPENCV_VERSION}
+
+RUN /opt/opencv-${OPENCV_VERSION} && make -j$(nproc) && make install
 
 WORKDIR /root/rust/src/
 COPY . .
-RUN OPENCV_LINK_LIBS=opencv_highgui,opencv_objdetect,opencv_dnn,opencv_videostab,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_rgbd,opencv_aruco,opencv_video,opencv_ml,opencv_imgcodecs,opencv_imgproc,opencv_core,ittnotify,tbb,liblibwebp,liblibtiff,liblibjpeg-turbo,liblibpng,liblibopenjp2,ippiw,ippicv,liblibprotobuf,quirc,zlib OPENCV_LINK_PATHS=/root/opencv4/lib,/usr/lib/x86_64-linux-gnu OPENCV_INCLUDE_PATHS=/root/opencv4/include/opencv4 cargo build --release
-
-
-# Bundle Stage
-FROM ubuntu:22.04
-WORKDIR /code
-COPY --from=builder /root/opencv4/ /root/opencv4/
-COPY --from=builder /root/rust/src/sample-mp4-file-small.mp4 /code/
-COPY --from=builder /root/rust/src/target/release/test_opencv .
-
-ENV OPENCV_PREFIX="/root/opencv4/"
-ENV OPENCV_LINK_LIBS=opencv_highgui,opencv_objdetect,opencv_dnn,opencv_videostab,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_rgbd,opencv_aruco,opencv_video,opencv_ml,opencv_imgcodecs,opencv_imgproc,opencv_core,ittnotify,tbb,liblibwebp,liblibtiff,liblibjpeg-turbo,liblibpng,liblibopenjp2,ippiw,ippicv,liblibprotobuf,quirc,zlib
+ENV OPENCV_LINK_LIBS=opencv_highgui,opencv_objdetect,opencv_dnn,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_ml,opencv_imgcodecs,opencv_imgproc,opencv_core,tbb,liblibwebp,liblibpng,liblibopenjp2
 ENV OPENCV_LINK_PATHS=/root/opencv4/lib,/usr/lib/x86_64-linux-gnu
 ENV OPENCV_INCLUDE_PATHS=/root/opencv4/include/opencv4
-CMD ["./test_opencv"]
+RUN cargo build --release
+
+
+## Bundle Stage
+#FROM ubuntu:22.04
+#WORKDIR /code
+#COPY --from=builder /root/opencv4/ /root/opencv4/
+#COPY --from=builder /root/rust/src/sample-mp4-file-small.mp4 /code/
+#COPY --from=builder /root/rust/src/target/release/test_opencv .
+#
+#ENV OPENCV_PREFIX="/root/opencv4/"
+#ENV OPENCV_LINK_LIBS=opencv_highgui,opencv_objdetect,opencv_dnn,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_ml,opencv_imgcodecs,opencv_imgproc,opencv_core,tbb,liblibwebp,liblibtiff,liblibjpeg-turbo,liblibpng,liblibopenjp2
+#ENV OPENCV_LINK_PATHS=/root/opencv4/lib,/usr/lib/x86_64-linux-gnu
+#ENV OPENCV_INCLUDE_PATHS=/root/opencv4/include/opencv4
+#CMD ["./test_opencv"]
