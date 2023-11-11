@@ -17,9 +17,8 @@ RUN set -xeu && \
         git \
         yasm \
         pkg-config \
-        libavcodec-dev \
-        libavformat-dev \
-        libswscale-dev
+        libdc1394-dev \
+        libdc1394-25
 
 RUN set -xeu && \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile=minimal
@@ -70,7 +69,7 @@ RUN cmake \
         -D OPENCV_ENABLE_NONFREE=ON \
         -D OPENCV_GENERATE_PKGCONFIG=OFF \
         -D PROTOBUF_UPDATE_FILES=OFF \
-        -D WITH_1394=OFF \
+        -D WITH_1394=ON \
         -D WITH_ADE=ON \
         -D WITH_ARAVIS=OFF \
         -D WITH_CLP=OFF \
@@ -78,7 +77,7 @@ RUN cmake \
         -D WITH_CUDA=OFF \
         -D WITH_CUFFT=OFF \
         -D WITH_EIGEN=OFF \
-        -D WITH_FFMPEG=ON \
+        -D WITH_FFMPEG=OFF \
         -D WITH_GDAL=ON \
         -D WITH_GDCM=OFF \
         -D WITH_GIGEAPI=OFF \
