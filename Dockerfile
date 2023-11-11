@@ -150,7 +150,7 @@ RUN cmake \
 
 WORKDIR /root/rust/src/
 COPY . .
-ENV OPENCV_LINK_LIBS=opencv_objdetect,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_imgcodecs,opencv_imgproc,opencv_core,liblibwebp,liblibtiff,liblibjpeg-turbo,liblibpng,liblibopenjp2,zlib,ippiw,ippicv,ittnotify
+ENV OPENCV_LINK_LIBS=opencv_objdetect,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_imgcodecs,opencv_imgproc,opencv_core,liblibwebp,liblibtiff,liblibjpeg-turbo,liblibpng,liblibopenjp2,zlib,ippiw,ippicv,ittnotify,avcodec,avformat,swscale
 ENV OPENCV_LINK_PATHS=/root/opencv4/lib,/root/opencv4/lib/opencv4/3rdparty,/usr/lib/x86_64-linux-gnu
 ENV OPENCV_INCLUDE_PATHS=/root/opencv4/include/opencv4
 RUN cargo build --release && cargo run --release
@@ -164,7 +164,7 @@ COPY --from=builder /root/rust/src/sample-mp4-file-small.mp4 .
 COPY --from=builder /root/rust/src/target/release/test_opencv .
 
 ENV OPENCV_PREFIX="/root/opencv4/"
-ENV OPENCV_LINK_LIBS=opencv_objdetect,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_imgcodecs,opencv_imgproc,opencv_core,liblibwebp,liblibtiff,liblibjpeg-turbo,liblibpng,liblibopenjp2,zlib,ippiw,ippicv,ittnotify
+ENV OPENCV_LINK_LIBS=opencv_objdetect,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_imgcodecs,opencv_imgproc,opencv_core,liblibwebp,liblibtiff,liblibjpeg-turbo,liblibpng,liblibopenjp2,zlib,ippiw,ippicv,ittnotify,avcodec,avformat,swscale
 ENV OPENCV_LINK_PATHS=/root/opencv4/lib,/root/opencv4/lib/opencv4/3rdparty,/usr/lib/x86_64-linux-gnu
 ENV OPENCV_INCLUDE_PATHS=/root/opencv4/include/opencv4
 CMD ["./test_opencv"]
