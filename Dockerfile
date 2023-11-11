@@ -25,7 +25,9 @@ RUN set -xeu && \
         libtiff-dev \
         libopenjp2-7-dev \
         libavformat-dev \
-        libpq-dev
+        libpq-dev \
+        libgstreamer-plugins-base1.0-dev \
+        libavcodec-dev
 
 RUN set -xeu && \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile=minimal
@@ -84,7 +86,7 @@ RUN cmake \
         -D WITH_CUBLAS=OFF \
         -D WITH_CUDA=OFF \
         -D WITH_CUFFT=OFF \
-        -D WITH_EIGEN=ON \
+        -D WITH_EIGEN=OFF \
         -D WITH_FFMPEG=OFF \
         -D WITH_GDAL=ON \
         -D WITH_GDCM=OFF \
@@ -130,7 +132,6 @@ RUN cmake \
         -D WITH_WEBP=ON \
         -D WITH_XIMEA=OFF \
         -D WITH_XINE=OFF \
-
         -D BUILD_JPEG=ON \
         -D BUILD_OPENJPEG=ON \
         -D BUILD_PNG=ON \
@@ -153,9 +154,7 @@ RUN cmake \
         -D BUILD_opencv_python2=OFF \
         -D BUILD_opencv_python3=OFF \
         -D CMAKE_INSTALL_PREFIX=${OPENCV_PREFIX} \
-        /opt/opencv-${OPENCV_VERSION}
-
-RUN /opt/opencv-${OPENCV_VERSION} && make -j$(nproc) && make install
+        /opt/opencv-${OPENCV_VERSION} && make -j$(nproc) && make install
 
 WORKDIR /root/rust/src/
 COPY . .
