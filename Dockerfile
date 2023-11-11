@@ -17,7 +17,10 @@ RUN set -xeu && \
         git \
         yasm \
         pkg-config \
-        ffmpeg
+        ffmpeg \
+        libavformat-dev \
+        libavcodec-dev \
+        libswscale-dev 
 
 RUN set -xeu && \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile=minimal
