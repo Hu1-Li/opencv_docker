@@ -16,7 +16,10 @@ RUN set -xeu && \
         cmake \
         git \
         yasm \
-        pkg-config
+        pkg-config \
+        libavcodec-dev \
+        libavformat-dev \
+        libswscale-dev
 
 RUN set -xeu && \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile=minimal
@@ -75,7 +78,7 @@ RUN cmake \
         -D WITH_CUDA=OFF \
         -D WITH_CUFFT=OFF \
         -D WITH_EIGEN=OFF \
-        -D WITH_FFMPEG=OFF \
+        -D WITH_FFMPEG=ON \
         -D WITH_GDAL=ON \
         -D WITH_GDCM=OFF \
         -D WITH_GIGEAPI=OFF \
@@ -106,7 +109,7 @@ RUN cmake \
         -D WITH_OPENNI=OFF \
         -D WITH_OPENVX=OFF \
         -D WITH_PNG=ON \
-        -D WITH_PROTOBUF=OFF \
+        -D WITH_PROTOBUF=ON \
         -D WITH_PTHREADS_PF=ON \
         -D WITH_PVAPI=OFF \
         -D WITH_QT=OFF \
@@ -139,13 +142,14 @@ RUN cmake \
         -D BUILD_opencv_apps=OFF \
         -D BUILD_opencv_python2=OFF \
         -D BUILD_opencv_python3=OFF \
+        -D BUILD_opencv_freetype=OFF \
         -D OPENCV_FORCE_3RDPARTY_BUILD=ON \
         -D CMAKE_INSTALL_PREFIX=${OPENCV_PREFIX} \
         /opt/opencv-${OPENCV_VERSION} && make -j$(nproc) && make install
 
 WORKDIR /root/rust/src/
 COPY . .
-ENV OPENCV_LINK_LIBS=opencv_objdetect,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_imgcodecs,opencv_imgproc,opencv_core,liblibwebp,liblibtiff,liblibjpeg-turbo,liblibpng,liblibopenjp2,zlib,ippiw,ippicv,ittnotify
+ENV OPENCV_LINK_LIBS=opencv_objdetect,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_imgcodecs,opencv_imgproc,opencv_core,liblibwebp,liblibtiff,liblibjpeg-turbo,liblibpng,liblibopenjp2,zlib,ippiw,ippicv,ittnotify,liblibprotobuf
 ENV OPENCV_LINK_PATHS=/root/opencv4/lib,/root/opencv4/lib/opencv4/3rdparty,/usr/lib/x86_64-linux-gnu
 ENV OPENCV_INCLUDE_PATHS=/root/opencv4/include/opencv4
 RUN cargo build --release
@@ -159,7 +163,7 @@ COPY --from=builder /root/rust/src/sample-mp4-file-small.mp4 .
 COPY --from=builder /root/rust/src/target/release/test_opencv .
 
 ENV OPENCV_PREFIX="/root/opencv4/"
-ENV OPENCV_LINK_LIBS=opencv_objdetect,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_imgcodecs,opencv_imgproc,opencv_core,liblibwebp,liblibtiff,liblibjpeg-turbo,liblibpng,liblibopenjp2,zlib,ippiw,ippicv,ittnotify
+ENV OPENCV_LINK_LIBS=opencv_objdetect,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_imgcodecs,opencv_imgproc,opencv_core,liblibwebp,liblibtiff,liblibjpeg-turbo,liblibpng,liblibopenjp2,zlib,ippiw,ippicv,ittnotify,liblibprotobuf
 ENV OPENCV_LINK_PATHS=/root/opencv4/lib,/root/opencv4/lib/opencv4/3rdparty,/usr/lib/x86_64-linux-gnu
 ENV OPENCV_INCLUDE_PATHS=/root/opencv4/include/opencv4
 CMD ["./test_opencv"]
