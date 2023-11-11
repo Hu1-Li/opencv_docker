@@ -56,7 +56,6 @@ RUN cmake \
         -D BUILD_TBB=OFF \
         -D BUILD_TESTS=OFF \
         -D BUILD_TIFF=OFF \
-        -D BUILD_WEBP=OFF \
         -D BUILD_WITH_DEBUG_INFO=OFF \
         -D BUILD_WITH_DYNAMIC_IPP=OFF \
         -D BUILD_ZLIB=OFF \
@@ -78,7 +77,6 @@ RUN cmake \
         -D INSTALL_TESTS=OFF \
         -D OPENCV_ENABLE_MEMALIGN=OFF \
         -D OPENCV_ENABLE_NONFREE=ON \
-        -D OPENCV_FORCE_3RDPARTY_BUILD=OFF \
         -D OPENCV_GENERATE_PKGCONFIG=OFF \
         -D PROTOBUF_UPDATE_FILES=OFF \
         -D WITH_1394=OFF \
@@ -125,7 +123,6 @@ RUN cmake \
         -D WITH_PVAPI=OFF \
         -D WITH_QT=OFF \
         -D WITH_QUIRC=OFF \
-        -D WITH_TBB=ON \
         -D WITH_TIFF=ON \
         -D WITH_UNICAP=OFF \
         -D WITH_VA=ON \
@@ -138,11 +135,10 @@ RUN cmake \
         -D BUILD_OPENJPEG=ON \
         -D BUILD_PNG=ON \
         -D BUILD_SHARED_LIBS=OFF \
-        -D WITH_TBB=ON \
+        -D WITH_TBB=OFF \
         -D BUILD_TIFF=ON \
         -D BUILD_WEBP=ON \
         -D BUILD_ZLIB=ON \
-        -D WITH_EIGEN=ON \
         -D WITH_V4L=OFF \
         -D BUILD_TIFF=ON \
         -D BUILD_opencv_java=OFF \
@@ -155,12 +151,13 @@ RUN cmake \
         -D BUILD_opencv_apps=OFF \
         -D BUILD_opencv_python2=OFF \
         -D BUILD_opencv_python3=OFF \
+        -D OPENCV_FORCE_3RDPARTY_BUILD=ON \
         -D CMAKE_INSTALL_PREFIX=${OPENCV_PREFIX} \
         /opt/opencv-${OPENCV_VERSION} && make -j$(nproc) && make install
 
 WORKDIR /root/rust/src/
 COPY . .
-ENV OPENCV_LINK_LIBS=opencv_objdetect,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_imgcodecs,opencv_imgproc,opencv_core,tbb,libwebp,libpng,libopenjp2
+ENV OPENCV_LINK_LIBS=opencv_objdetect,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_imgcodecs,opencv_imgproc,opencv_core,tbb,libpng,libopenjp2
 ENV OPENCV_LINK_PATHS=/root/opencv4/lib,/usr/lib/x86_64-linux-gnu
 ENV OPENCV_INCLUDE_PATHS=/root/opencv4/include/opencv4
 RUN cargo build --release
