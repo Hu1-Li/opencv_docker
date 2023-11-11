@@ -26,7 +26,6 @@ RUN set -xeu && \
         libopenjp2-7-dev \
         libavformat-dev \
         libpq-dev \
-        libgstreamer-plugins-base1.0-dev \
         libavcodec-dev
 
 RUN set -xeu && \
@@ -39,6 +38,9 @@ ENV OPENCV_PREFIX="/root/opencv4/"
 RUN wget -q https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip -O opencv.zip && unzip -qq opencv.zip -d /opt/
 
 RUN cmake \
+        -D BUILD_opencv_dnn=OFF \
+        -D BUILD_opencv_highgui=OFF \
+        -D BUILD_opencv_ml=OFF \
         -D BUILD_CUDA_STUBS=OFF \
         -D BUILD_DOCS=OFF \
         -D BUILD_EXAMPLES=OFF \
@@ -92,7 +94,7 @@ RUN cmake \
         -D WITH_GDCM=OFF \
         -D WITH_GIGEAPI=OFF \
         -D WITH_GPHOTO2=ON \
-        -D WITH_GSTREAMER=ON \
+        -D WITH_GSTREAMER=OFF \
         -D WITH_GSTREAMER_0_10=OFF \
         -D WITH_GTK=OFF \
         -D WITH_GTK_2_X=OFF \
@@ -158,7 +160,7 @@ RUN cmake \
 
 WORKDIR /root/rust/src/
 COPY . .
-ENV OPENCV_LINK_LIBS=opencv_highgui,opencv_objdetect,opencv_dnn,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_ml,opencv_imgcodecs,opencv_imgproc,opencv_core,tbb,liblibwebp,liblibpng,liblibopenjp2
+ENV OPENCV_LINK_LIBS=opencv_objdetect,opencv_calib3d,opencv_features2d,opencv_stitching,opencv_flann,opencv_videoio,opencv_video,opencv_imgcodecs,opencv_imgproc,opencv_core,tbb,libwebp,libpng,libopenjp2
 ENV OPENCV_LINK_PATHS=/root/opencv4/lib,/usr/lib/x86_64-linux-gnu
 ENV OPENCV_INCLUDE_PATHS=/root/opencv4/include/opencv4
 RUN cargo build --release
