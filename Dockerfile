@@ -137,7 +137,7 @@ RUN cmake \
         -D BUILD_opencv_java=OFF \
         -D WITH_CUDA=OFF \
         -D WITH_OPENGL=OFF \
-        -D WITH_OPENCL=ON \
+        -D WITH_OPENCL=OFF \
         -D BUILD_TESTS=OFF \
         -D BUILD_PERF_TESTS=OFF \
         -D CMAKE_BUILD_TYPE=RELEASE \
@@ -155,8 +155,7 @@ ENV OPENCV_INCLUDE_PATHS=/root/opencv4/include/opencv4
 
 # setup libtorch & rust
 WORKDIR /root/
-RUN curl -s https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.0.0%2Bcpu.zip -o libtorch.zip
-RUN unzip -o -qq libtorch.zip && rm -f libtorch.zip
+RUN curl -s https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.0.0%2Bcpu.zip -o libtorch.zip && unzip -o -qq libtorch.zip && rm -f libtorch.zip
 ENV LIBTORCH=/root/libtorch
 ENV LIBTORCH_INCLUDE=/root/libtorch
 ENV LD_LIBRARY_PATH=/root/libtorch/lib:$LD_LIBRARY_PATH
