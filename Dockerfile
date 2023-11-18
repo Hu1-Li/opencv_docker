@@ -170,7 +170,7 @@ RUN cargo build --release
 
 # Build Stage
 FROM ubuntu:22.04
-RUN apt-get update && apt-get install -y libgomp1 libavformat58 libavcodec58 libswscale5 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y libgomp1 libavformat58 libavcodec58 libswscale5 procps cron && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && apt-get -qq autoremove && apt-get -qq clean && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /root/libtorch /root/libtorch
 COPY --from=builder /root/opencv4 /root/opencv4
