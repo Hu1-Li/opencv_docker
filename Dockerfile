@@ -11,6 +11,7 @@ ENV PATH /usr/local/bin:$PATH
 
 # setup env
 ENV TZ=Asia/Shanghai
+RUN echo "Asia/Shanghai" > /etc/timezone && rm -f /etc/localtime && ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
 # http://bugs.python.org/issue19846
 # > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
