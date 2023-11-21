@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "test" ]
+    branches: [ "py3.8" ]
   pull_request:
     branches: [ "main" ]
 
