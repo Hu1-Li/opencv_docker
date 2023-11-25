@@ -158,7 +158,7 @@ RUN set -xeu && apt-get install -y curl unzip clang libclang-dev && curl --proto
 ENV PATH="${PATH}:/root/.cargo/bin"
 
 WORKDIR /root/
-RUN curl -s https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.0.0%2Bcpu.zip -o libtorch.zip
+RUN curl -s https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.1.0%2Bcpu.zip -o libtorch.zip
 RUN unzip -o -qq libtorch.zip && rm libtorch.zip
 ENV LIBTORCH /root/libtorch
 ENV LIBTORCH_INCLUDE /root/libtorch
