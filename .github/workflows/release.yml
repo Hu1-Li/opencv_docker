@@ -24,7 +24,7 @@ jobs:
         run: docker pull deltat/rust:dev
 
       - name: Save Docker image
-        run: docker save deltat/rust:dev > rust_dev.tar
+        run: docker save deltat/rust:dev-pre-cxx11 > rust_dev.tar
 
       - name: Compress Docker image
         run: gzip rust_dev.tar

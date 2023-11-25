@@ -155,7 +155,11 @@ ENV OPENCV_INCLUDE_PATHS=/root/opencv4/include/opencv4
 
 # setup libtorch & rust
 WORKDIR /root/
-RUN curl -s https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.1.0%2Bcpu.zip -o libtorch.zip && unzip -o -qq libtorch.zip && rm -f libtorch.zip
+#Download here (Pre-cxx11 ABI):
+#https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-2.1.0%2Bcpu.zip
+#Download here (cxx11 ABI):
+#https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.1.0%2Bcpu.zip
+RUN curl -s https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-2.1.0%2Bcpu.zip -o libtorch.zip && unzip -o -qq libtorch.zip && rm -f libtorch.zip
 ENV LIBTORCH=/root/libtorch
 ENV LIBTORCH_INCLUDE=/root/libtorch
 ENV LD_LIBRARY_PATH=/root/libtorch/lib:$LD_LIBRARY_PATH
