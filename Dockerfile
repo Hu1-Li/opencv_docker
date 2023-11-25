@@ -19,7 +19,8 @@ RUN set -xeu && \
         pkg-config \
         python3 \
         python3-pip \
-        libgomp1
+        libgomp1 \
+        libmkl-dev
 
 RUN set -xeu && \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile=minimal
@@ -30,4 +31,4 @@ RUN pip install pyyaml
 
 WORKDIR /root/
 
-RUN git clone -b v2.1.0 --recurse-submodule https://github.com/pytorch/pytorch.git pytorch-static --depth 1 && cd pytorch-static && USE_ROCM=OFF USE_OPENMP=ON BUILD_TYPE=Release USE_CUDNN=OFF BUILD_PYTHON=OFF BUILD_TEST=OFF USE_CUDA=OFF BUILD_SHARED_LIBS=OFF python3 setup.py build
+RUN git clone -b v2.1.0 --recurse-submodule https://github.com/pytorch/pytorch.git pytorch-static --depth 1 && cd pytorch-static && BUILD_CAFFE2=OFF USE_ROCM=OFF USE_OPENMP=ON BUILD_TYPE=Release USE_CUDNN=OFF BUILD_PYTHON=OFF BUILD_TEST=OFF USE_CUDA=OFF BUILD_SHARED_LIBS=OFF python3 setup.py build
