@@ -1,2 +1,2 @@
-[ENV]
+[env]
 LIBTORCH_STATIC=1
