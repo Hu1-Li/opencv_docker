@@ -31,4 +31,7 @@ RUN pip install pyyaml mkl-devel
 
 WORKDIR /root/
 
-RUN git clone -b v2.1.0 --recurse-submodule https://github.com/pytorch/pytorch.git pytorch-static --depth 1 && cd pytorch-static && CAFFE2_USE_MSVC_STATIC_RUNTIME=OFF BUILD_CAFFE2_OPS=OFF FULL_CAFFE2=OFF BUILD_CAFFE2=OFF USE_ROCM=OFF USE_OPENMP=ON BUILD_TYPE=Release USE_CUDNN=OFF BUILD_PYTHON=0 BUILD_TEST=OFF USE_CUDA=OFF BUILD_SHARED_LIBS=OFF python3 setup.py build 
+RUN git clone -b v2.1.0 --recurse-submodule https://github.com/pytorch/pytorch.git pytorch-static --depth 1 && mkdir /root/libtorch_build && cd /root/libtorch_build && cmake -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_CAFFE2_OPS:BOOL=OFF -DFULL_CAFFE2:BOOL=OFF -DBUILD_CAFFE2:BOOL=OFF -DUSE_OPENMP:BOOL=ON -DUSE_CUDNN:BOOL=OFF -DBUILD_PYTHON:BOOL=OFF -DBUILD_TEST:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release -DUSE_CUDA:BOOL=OFF -DCMAKE_INSTALL_PREFIX:PATH=/root/libtorch /root/pytorch-static -DCMAKE_CXX_FLAGS:STRING=-fPIC && cmake --build . --target install --parallel
+
+WORKDIR /root/code
+COPY . .
