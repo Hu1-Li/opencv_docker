@@ -31,7 +31,7 @@ RUN pip install pyyaml mkl-devel
 
 WORKDIR /root/
 
-RUN git clone -b v2.1.0 --recurse-submodule https://github.com/pytorch/pytorch.git pytorch-static --depth 1 && mkdir /root/libtorch_build && cd /root/libtorch_build && cmake -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_CAFFE2_OPS:BOOL=OFF -DBUILD_CAFFE2:BOOL=OFF -DUSE_OPENMP:BOOL=ON -DUSE_CUDNN:BOOL=OFF -DBUILD_PYTHON:BOOL=OFF -DBUILD_TEST:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release -DUSE_CUDA:BOOL=OFF -DCMAKE_INSTALL_PREFIX:PATH=/root/libtorch -DUSE_DISTRIBUTED:BOOL=OFF /root/pytorch-static -DCMAKE_CXX_FLAGS:STRING=-fPIC -D_GLIBCXX_USE_CXX11_ABI=1 -DFBGEMM_STATIC=1 && cmake --build . --target install --parallel
+RUN git clone -b v2.1.0 --recurse-submodule https://github.com/pytorch/pytorch.git pytorch-static --depth 1 && mkdir /root/libtorch_build && cd /root/libtorch_build && cmake -DBUILD_SHARED_LIBS:BOOL=OFF -DFBGEMM_STATIC:BOOL=ON -DBUILD_CAFFE2_OPS:BOOL=OFF -DBUILD_CAFFE2:BOOL=OFF -DUSE_OPENMP:BOOL=ON -DUSE_CUDNN:BOOL=OFF -DBUILD_PYTHON:BOOL=OFF -DBUILD_TEST:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release -DUSE_CUDA:BOOL=OFF -DCMAKE_INSTALL_PREFIX:PATH=/root/libtorch -DUSE_DISTRIBUTED:BOOL=OFF /root/pytorch-static -DCMAKE_CXX_FLAGS:STRING=-fPIC -D_GLIBCXX_USE_CXX11_ABI=1 && cmake --build . --target install --parallel
 
 WORKDIR /root/code
 COPY . .
