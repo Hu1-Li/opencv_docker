@@ -12,8 +12,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Save Docker image
-        run: curl -o qlib_data.zip " https://qlibpublic.blob.core.windows.net/data/default/stock_data/v2/qlib_data_hs3
-00_5min_latest.zip?sv=2020-10-02&st=2023-06-21T00%3A58%3A06Z&se=2043-06-22T00%3A58%3A00Z&sr=c&sp=rl&sig=ykiWECM7%2BsPLXE32ZM6p2Tc1mMDeUaCmo8LD%2BOKiAo4%3D"
+        run: curl -o qlib_data.zip "https://qlibpublic.blob.core.windows.net/data/default/stock_data/v2/qlib_data_hs300_5min_latest.zip?sv=2020-10-02&st=2023-06-21T00%3A58%3A06Z&se=2043-06-22T00%3A58%3A00Z&sr=c&sp=rl&sig=ykiWECM7%2BsPLXE32ZM6p2Tc1mMDeUaCmo8LD%2BOKiAo4%3D"
 
       - name: Create Release
         id: create_release
