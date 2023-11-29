@@ -1,0 +1,38 @@
+name: Docker Image to GitHub Release
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Save Docker image
+        run: curl -o qlib_data.zip " https://qlibpublic.blob.core.windows.net/data/default/stock_data/v2/qlib_data_hs3
+00_5min_latest.zip?sv=2020-10-02&st=2023-06-21T00%3A58%3A06Z&se=2043-06-22T00%3A58%3A00Z&sr=c&sp=rl&sig=ykiWECM7%2BsPLXE32ZM6p2Tc1mMDeUaCmo8LD%2BOKiAo4%3D"
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./qlib_data.zip
+          asset_name: qlib_data.zip
+
