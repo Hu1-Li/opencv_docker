@@ -6,6 +6,8 @@ RUN curl -o /tmp/Miniconda3-latest-Linux-x86_64.sh https://repo.anaconda.com/min
     /bin/bash /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda3 && \
     rm /tmp/Miniconda3-latest-Linux-x86_64.sh
 
+RUN yum install -y maven tar
+
 # Setup conda
 ENV PATH="/opt/miniconda3/bin:$PATH"
 RUN conda init bash
