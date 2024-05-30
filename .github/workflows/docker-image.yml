@@ -2,9 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "py3.8" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ "kylin-conda" ]
 
 jobs:
 
@@ -26,4 +24,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: deltat/py3.8:latest
+        tags: deltat/kylin-conda:latest
