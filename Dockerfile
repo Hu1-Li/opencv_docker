@@ -2,10 +2,8 @@
 FROM lhrbest/kylinos:v10_sp3
 
 # Download Miniconda installation script
-RUN curl -o /tmp/Miniconda3-latest-Linux-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-
-# Install Miniconda
-RUN /bin/bash /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda3 && \
+RUN curl -o /tmp/Miniconda3-latest-Linux-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
+    /bin/bash /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda3 && \
     rm /tmp/Miniconda3-latest-Linux-x86_64.sh
 
 # Setup conda
